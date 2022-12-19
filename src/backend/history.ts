@@ -2,6 +2,19 @@ import { isAfter, parseISO, sub } from 'date-fns';
 //import { request } from 'undici';
 import type { SimpMeterResult, SimpMeterState, WatchHistoryItem } from '../types/main';
 
+export async function validateFile(file: File): Promise<boolean> {
+	// check if json file is array of watch history items
+	const fileText = await file.text();
+	const fileJson = JSON.parse(fileText);
+	if (Array.isArray(fileJson)) {
+		const firstItem = fileJson[0];
+		if (firstItem.header && firstItem.title && firstItem.titleUrl && firstItem.subtitles && firstItem.time && firstItem.products && firstItem.activityControls) {
+			return true;
+		}
+	}
+	return false;
+}
+
 export function saveFile(event: Event, app: any) {
 	const fileSelected = (event.target as HTMLInputElement).files?.length;
 	if (fileSelected) {

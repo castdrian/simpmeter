@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { parseWatchHistory } from '../backend/history';
+import { parseWatchHistory,validateFile } from '../backend/history';
 import { SimpMeterResult, SimpMeterState } from '../types/main';
 import ResultsView from './ResultsView.vue';
 import UploadView from './UploadView.vue';
@@ -15,6 +15,13 @@ async function onUpload(event: Event, app: SimpMeterState) {
 	// validate that file is a .json file
 	if (file.type !== 'application/json') {
 		alert('Please upload a .json file.');
+		app.loading = false;
+		return;
+	}
+
+	// validate that file is in valid format
+	if (!await validateFile(file)) {
+		alert('Please upload a valid watch-history.json file.');
 		app.loading = false;
 		return;
 	}

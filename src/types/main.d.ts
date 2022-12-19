@@ -1,10 +1,16 @@
 export interface WatchHistoryItem {
-	header: string,
-	title: string,
-	titleUrl: string,
-	time: string,
-	products: [string],
-	activityControls: [string]
+	header: string;
+	title: string;
+	titleUrl: string;
+	subtitles: [
+		{
+			name: string;
+			url: string;
+		}
+	]
+	time: string;
+	products: [string];
+	activityControls: [string];
 }
 
 export interface SimpMeterResult {
