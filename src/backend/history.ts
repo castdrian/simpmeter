@@ -1,5 +1,4 @@
 import { isAfter, parseISO, sub } from 'date-fns';
-//import { request } from 'undici';
 import type { SimpMeterResult, SimpMeterState, WatchHistoryItem } from '../types/main';
 
 export async function validateFile(file: File): Promise<boolean> {
@@ -40,8 +39,7 @@ export async function switchSelect(event: Event, app: SimpMeterState): Promise<S
 }
 
 async function getChannelAvatar(url: string): Promise<string> {
-	// fetch with cors proxy url
-	const response = await fetch(`https://api.allorigins.win/get?url=${url}`);
+	const response = await fetch(url);
 	const html = await response.text();
 	const parser = new DOMParser();
 	const doc = parser.parseFromString(html, 'text/html');
@@ -146,7 +144,7 @@ export async function parseWatchHistory(videos: WatchHistoryItem[], app: SimpMet
 
 async function getChannelUrl(titleUrl: string): Promise<{ channel: string; url: string; }> {
 	// fetch with cors proxy url
-	const response = await fetch(`https://api.allorigins.win/get?url=${titleUrl}`);
+	const response = await fetch(titleUrl);
 	const html = await response.text();
 
 	
@@ -156,9 +154,8 @@ async function getChannelUrl(titleUrl: string): Promise<{ channel: string; url: 
 	const match = html.match(regex);
 	console.log(match);
 
-
 	// get channel name from url
-	const res = await fetch(`https://api.allorigins.win/get?url=${match}`);
+	const res = await fetch(match as unknown as string);
 	const html2 = await res.text();
 	const parser = new DOMParser();
 	const doc = parser.parseFromString(html2, 'text/html');
