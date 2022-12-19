@@ -1,4 +1,5 @@
-# Nuxt Example
+# Simp-O-Meter
+![](https://cdn.adriancastro.dev/pTJOYkn.png)
 
 Deploy your [Nuxt](https://nuxt.com) project to Vercel with zero configuration.
 
