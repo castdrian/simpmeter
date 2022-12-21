@@ -1,5 +1,6 @@
 import { isAfter, parseISO, sub } from 'date-fns';
 import type { SimpMeterResult, SimpMeterState, WatchHistoryItem } from '../types/main';
+import { useFetch } from '#app';
 
 export async function validateFile(file: File): Promise<boolean> {
 	// check if json file is array of watch history items
@@ -96,6 +97,8 @@ export async function parseWatchHistory(videos: WatchHistoryItem[], app: SimpMet
 		}
 	}
 
+	console.log('filtered videos', filteredVideos);
+
 	const channels: { channel: string; url: string; avatar: string; time: Date; }[] = [];
 
 	for (const video of filteredVideos) {
@@ -143,8 +146,10 @@ export async function parseWatchHistory(videos: WatchHistoryItem[], app: SimpMet
 }
 
 async function getChannelUrl(titleUrl: string): Promise<{ channel: string; url: string; }> {
-	const response = await useFetch(titleUrl);
-	const html = await response.data as unknown as string;
+	console.log(titleUrl);
+	const { data: response } = await useFetch(titleUrl);
+	console.log(response);
+	const html = response as unknown as string;
 
 	
 	// find youtube channel url in html like http://www.youtube.com/channel/UCrs-raoLlvf1CE7ZqX7ls2w\

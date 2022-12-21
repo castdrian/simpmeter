@@ -29,6 +29,9 @@ async function onUpload(event: Event, app: SimpMeterState) {
 		const json = JSON.parse(event.target.result);
 		app.json = json;
 		result.value = await parseWatchHistory(json, app);
+		if (!result.value) {
+			alert('Something went wrong. Please try again.');
+		}
 	};
 	reader.readAsText(file);
 }
