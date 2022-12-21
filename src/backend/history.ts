@@ -39,8 +39,8 @@ export async function switchSelect(event: Event, app: SimpMeterState): Promise<S
 }
 
 async function getChannelAvatar(url: string): Promise<string> {
-	const response = await fetch(url);
-	const html = await response.text();
+	const response = await useFetch(url);
+	const html = await response.data as unknown as string;
 	const parser = new DOMParser();
 	const doc = parser.parseFromString(html, 'text/html');
 	
@@ -61,7 +61,7 @@ async function getChannelAvatar(url: string): Promise<string> {
 
 export async function parseWatchHistory(videos: WatchHistoryItem[], app: SimpMeterState): Promise<SimpMeterResult[]> {
 	const filteredVideos: { titleUrl: string, time: Date }[] = [];
-
+	console.log('parsing watch history...');
 	for (const video of videos) {
 		if (video.products[0] === 'YouTube') {
 			const time = parseISO(video.time);
@@ -143,9 +143,8 @@ export async function parseWatchHistory(videos: WatchHistoryItem[], app: SimpMet
 }
 
 async function getChannelUrl(titleUrl: string): Promise<{ channel: string; url: string; }> {
-	// fetch with cors proxy url
-	const response = await fetch(titleUrl);
-	const html = await response.text();
+	const response = await useFetch(titleUrl);
+	const html = await response.data as unknown as string;
 
 	
 	// find youtube channel url in html like http://www.youtube.com/channel/UCrs-raoLlvf1CE7ZqX7ls2w\
@@ -155,8 +154,9 @@ async function getChannelUrl(titleUrl: string): Promise<{ channel: string; url: 
 	console.log(match);
 
 	// get channel name from url
-	const res = await fetch(match as unknown as string);
-	const html2 = await res.text();
+	const { data: res } = await useFetch(match as unknown as string);
+	console.log(res);
+	const html2 = await res as unknown as string;
 	const parser = new DOMParser();
 	const doc = parser.parseFromString(html2, 'text/html');
 	const channel = doc.querySelector('title')?.textContent?.split(' - ')[0] as string;
